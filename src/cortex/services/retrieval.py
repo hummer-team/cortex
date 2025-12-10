@@ -2,7 +2,7 @@ import ollama
 from sentence_transformers import SentenceTransformer
 from cortex.core.config import EMBEDDING_MODEL, SYNTHESIS_MODEL, RETRIEVAL_TOP_K
 from cortex.services.storage import storage_service
-from cortex.core.models import ContextResponse  # 确认导入了我们定义的模型
+from cortex.core.models import ContextResponse
 
 
 class RetrievalService:

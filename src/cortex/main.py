@@ -1,9 +1,9 @@
 # main.py
 import uvicorn
 from fastapi import FastAPI, HTTPException
-from core.models import IngestRequest, QueryRequest, ContextResponse
-from services.ingestion import IngestionService
-from services.retrieval import RetrievalService
+from cortex.core.models import IngestRequest, QueryRequest, ContextResponse
+from cortex.services.ingestion import IngestionService
+from cortex.services.retrieval import RetrievalService
 
 # --- 初始化应用和服务 ---
 app = FastAPI(
