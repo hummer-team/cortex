@@ -1,0 +1,58 @@
+# main.py
+import uvicorn
+from fastapi import FastAPI, HTTPException
+from core.models import IngestRequest, QueryRequest, ContextResponse
+from services.ingestion import IngestionService
+from services.retrieval import RetrievalService
+
+# --- 初始化应用和服务 ---
+app = FastAPI(
+    title="个人记忆层助手 (Personal Memory Assistant)",
+    description="一个本地优先的、为用户提供智能上下文的AI助手核心引擎。",
+    version="0.1.0"
+)
+
+# 在应用启动时，一次性加载所有需要的服务和模型
+ingestion_service = IngestionService()
+retrieval_service = RetrievalService()
+
+# --- API 端点定义 ---
+
+
+@app.get("/", tags=["Health Check"])
+def read_root():
+    """健康检查端点"""
+    return {"status": "ok", "message": "Memory Assistant is running."}
+
+
+@app.post("/ingest", tags=["Memory Ingestion"], status_code=202)
+def ingest_memory(request: IngestRequest):
+    """
+    摄入一份新的记忆。
+    这是一个异步的过程，客户端可以立即得到响应。
+    """
+    try:
+        # 在实际生产中，这里应该使用后台任务（如FastAPI的BackgroundTask或Celery）
+        # 为了MVP的简洁性，我们暂时同步执行
+        ingestion_service.process(request.content, request.source)
+        return {"message": "Ingestion task accepted."}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.post("/query", response_model=ContextResponse, tags=["Memory Retrieval"])
+def query_memory(request: QueryRequest) -> ContextResponse:
+    """
+    根据查询主题，检索并生成上下文摘要。
+    """
+    try:
+        response = retrieval_service.query_and_synthesize(request.query)
+        return response
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+# --- 启动命令 ---
+if __name__ == "__main__":
+    print("Starting Memory Assistant server...")
+    uvicorn.run(app, host="127.0.0.1", port=8000)
