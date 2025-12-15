@@ -4,19 +4,18 @@ from fastapi import FastAPI, HTTPException
 from cortex.core.models import IngestRequest, QueryRequest, ContextResponse
 from cortex.services.ingestion import IngestionService
 from cortex.services.retrieval import RetrievalService
+from cortex.logger.logger import get_logger
 
-# --- 初始化应用和服务 ---
+log = get_logger(__name__)
+
 app = FastAPI(
     title="个人记忆层助手 (Personal Memory Assistant)",
     description="一个本地优先的、为用户提供智能上下文的AI助手核心引擎。",
     version="0.1.0"
 )
 
-# 在应用启动时，一次性加载所有需要的服务和模型
 ingestion_service = IngestionService()
 retrieval_service = RetrievalService()
-
-# --- API 端点定义 ---
 
 
 @app.get("/", tags=["Health Check"])
@@ -32,8 +31,6 @@ def ingest_memory(request: IngestRequest):
     这是一个异步的过程，客户端可以立即得到响应。
     """
     try:
-        # 在实际生产中，这里应该使用后台任务（如FastAPI的BackgroundTask或Celery）
-        # 为了MVP的简洁性，我们暂时同步执行
         ingestion_service.process(request.content, request.source)
         return {"message": "Ingestion task accepted."}
     except Exception as e:
@@ -52,7 +49,6 @@ def query_memory(request: QueryRequest) -> ContextResponse:
         raise HTTPException(status_code=500, detail=str(e))
 
 
-# --- 启动命令 ---
 if __name__ == "__main__":
-    print("Starting Memory Assistant server...")
+    log.info("Starting Memory Assistant server...")
     uvicorn.run(app, host="127.0.0.1", port=8000)

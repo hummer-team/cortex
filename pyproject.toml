@@ -18,6 +18,7 @@ dependencies = [
     "chromadb>=0.5.0",
     "sentence-transformers>=2.7.0",
     "ollama>=0.2.0",
+    "chainlit>=2.9.3",
 ]
 
 [build-system]

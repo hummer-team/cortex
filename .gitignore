@@ -180,5 +180,10 @@ venv.bak/
 **/*.local.yml
 **/.secrets.yml
 
-src/auto_spider/data_diff/db_config.json
-.logs
+logs
+.files
+.chainlit
+_.md
+dataset.md
+data
+src/cortex/data
