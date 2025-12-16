@@ -184,6 +184,8 @@ logs
 .files
 .chainlit
 _.md
-dataset.md
+dataset
 data
 src/cortex/data
+.env
+prompt

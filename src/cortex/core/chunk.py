@@ -1,9 +1,10 @@
 from cortex.logger.logger import get_logger
 import re
+
 log = get_logger(__name__)
 
 
-class Chunck:
+class Chunk:
     def clean_text(self, text: str) -> str:
         """
         执行基础的文本清洗。
@@ -27,3 +28,6 @@ class Chunck:
             chunks.append(text[start:end])
             start += chunk_size - chunk_overlap
         return chunks
+
+
+chunk = Chunk()

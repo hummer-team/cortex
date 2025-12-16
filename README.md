@@ -58,4 +58,7 @@ Cortex is built on a modern, robust, and privacy-focused technology stack:
     *   Node.js 18+
     *   Ollama installed and running.
 
-    
+## Run shell
+```bash
+chainlit run src/cortex/app.py -w
+```
